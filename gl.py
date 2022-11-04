@@ -20,6 +20,11 @@ class Model(object):
         self.scale = glm.vec3(1,1,1)
         self.textureSurface = image.load(texturename)
         self.textureData = image.tostring(self.textureSurface, "RGBA", True)
+
+        self.textureSurfaceRainbow = image.load("rainbow.jpg")
+        self.textureDataRainbow = image.tostring(self.textureSurfaceRainbow, "RGBA", True)
+
+        self.texturerainbow = glGenTextures(1)
         self.texture = glGenTextures(1)
 
     def createVertexBuffer(self):
@@ -143,6 +148,13 @@ class Model(object):
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self.textureSurface.get_width(), self.textureSurface.get_height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, self.textureData)
         glGenerateMipmap(GL_TEXTURE_2D)
 
+        
+
+        glActiveTexture(GL_TEXTURE1)
+        glBindTexture(GL_TEXTURE_2D, self.texturerainbow)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self.textureSurfaceRainbow.get_width(), self.textureSurfaceRainbow.get_height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, self.textureDataRainbow)
+        glGenerateMipmap(GL_TEXTURE_2D)
+
         glDrawArrays(GL_TRIANGLES, 0, self.polycount * 3 )
 
 
@@ -169,7 +181,7 @@ class Renderer(object):
         self.camDistance = 5
 
         #self.ambientLight = glm.vec3(0.1,0.1,0.1)
-
+        self.colorRaibow = glm.vec2(0,0.5)
 
         # ViewMatrix
         self.camPosition = glm.vec3(0,0,0)
@@ -230,6 +242,8 @@ class Renderer(object):
 
 
             glUniform1i(glGetUniformLocation(self.active_shader, "tex"), 0)
+            glUniform1i(glGetUniformLocation(self.active_shader, "tex1"), 1)
+            glUniform2fv(glGetUniformLocation(self.active_shader, "colorRaibow"), 1, glm.value_ptr(self.colorRaibow))
             glUniform1f(glGetUniformLocation(self.active_shader, "time"), self.time)
 
             #glUniform3f(glGetUniformLocation(self.active_shader, "pointLight"), self.pointLight.x, self.pointLight.y, self.pointLight.z)
