@@ -40,6 +40,7 @@ isRunning = True
 while isRunning:
 
     keys = pygame.key.get_pressed()
+    rend.timestamp.x += deltaTime
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -59,6 +60,8 @@ while isRunning:
                 rend.setShaders(vertex_shader, toon_shader)
             elif event.key == pygame.K_3:
                 rend.setShaders(vertex_shader, rainbow_shader)
+            elif event.key == pygame.K_4:
+                rend.setShaders(vertex_shader, siren_shader)
 
     if keys[K_q]:
         if rend.camDistance > 2:

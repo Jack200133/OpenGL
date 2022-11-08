@@ -183,6 +183,8 @@ class Renderer(object):
         #self.ambientLight = glm.vec3(0.1,0.1,0.1)
         self.colorRaibow = glm.vec2(0,0.5)
 
+        self.timestamp = glm.vec2(0,0)
+
         # ViewMatrix
         self.camPosition = glm.vec3(0,0,0)
         self.camRotation = glm.vec3(0,0,0)
@@ -245,6 +247,8 @@ class Renderer(object):
             glUniform1i(glGetUniformLocation(self.active_shader, "tex1"), 1)
             glUniform2fv(glGetUniformLocation(self.active_shader, "colorRaibow"), 1, glm.value_ptr(self.colorRaibow))
             glUniform1f(glGetUniformLocation(self.active_shader, "time"), self.time)
+
+            glUniform2fv(glGetUniformLocation(self.active_shader, "theta"), 1, glm.value_ptr(self.timestamp))
 
             #glUniform3f(glGetUniformLocation(self.active_shader, "pointLight"), self.pointLight.x, self.pointLight.y, self.pointLight.z)
             glUniform3fv(glGetUniformLocation(self.active_shader, "pointLight"), 1, glm.value_ptr(self.pointLight))
