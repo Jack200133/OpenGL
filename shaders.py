@@ -26,6 +26,58 @@ void main()
 }
 '''
 
+gomu_gomu_shader ='''
+#version 450 core
+
+layout (location = 0) in vec3 position;
+layout (location = 1) in vec2 texcoords;
+layout (location = 2) in vec3 normals;
+
+uniform mat4 modelMatrix;
+uniform mat4 viewMatrix;
+uniform mat4 projectionMatrix;
+
+uniform float time;
+
+out vec2 UVs;
+out vec3 norms;
+out vec3 pos;
+
+varying vec3 fNormal;
+varying vec3 fPosition;
+const float pi=3.14159;
+varying vec3 modelX;
+varying vec3 modelN;
+varying vec3 rawX;
+
+vec2 Rotate2D(vec2 vec_in, float angle)
+{
+  vec2 vec_out;
+  vec_out.x=cos(angle)*vec_in.x-sin(angle)*vec_in.y;
+  vec_out.y=sin(angle)*vec_in.x+cos(angle)*vec_in.y;
+  return vec_out;
+}
+
+void main()
+{
+  pos = (modelMatrix * vec4(position + (normals* sin(time*3))/10, 1.0)).xyz;
+  modelX=pos;
+  rawX=pos;
+  modelN=normals;  
+  UVs = texcoords;
+  
+  // Comment these lines out to stop twisting
+  //modelX.xz = Rotate2D(modelX.xz,sin(time)); // Try commenting out *just* this line :)
+  modelX.x = modelX.x + sin(modelX.y + time*3)/2;
+  //modelN.xz = Rotate2D(modelN.xz,sin(time)); // This is simple as that only since the transform is rotation
+  norms = normals;
+  //fNormal = normalize((modelMatrix * vec4(norms, 0)).xyz);
+  vec4 pos = viewMatrix * vec4(modelX, 1.0);
+  fPosition = pos.xyz;
+  gl_Position = projectionMatrix * pos;
+}
+'''
+
 fragment_shader ='''
 #version 450 core
 
@@ -49,17 +101,18 @@ void main()
 
 toon_shader = '''
 uniform vec3 pointLight;
-varying vec3 norms;
+in vec3 norms;
 in vec2 UVs;
 uniform sampler2D tex;
+in vec3 pos;
 
 void main()
 {
 	float intensity;
 	vec4 color;
-	intensity = dot(pointLight,norms);
+	intensity = dot(normalize(pointLight-pos),norms);
 
-	if (intensity > 0.95)
+	if (intensity > 0.8)
 		color = texture(tex, UVs) * 1;
 	else if (intensity > 0.5)
 		color =texture(tex, UVs) *0.6 ;
@@ -110,8 +163,8 @@ uniform vec2 theta;
 
 void main()
 {
-	vec3 dir1 = vec3(cos(theta),0,sin(theta)); 
-	vec3 dir2 = vec3(sin(theta),0,cos(theta));
+	vec3 dir1 = vec3(cos(theta.x),0,sin(theta.x)); 
+	vec3 dir2 = vec3(sin(theta.x),0,cos(theta.x));
 
 	float diffuse1 = pow(dot(norms,dir1),2.0);
 	float diffuse2 = pow(dot(norms,dir2),2.0);

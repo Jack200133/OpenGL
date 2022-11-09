@@ -62,6 +62,8 @@ while isRunning:
                 rend.setShaders(vertex_shader, rainbow_shader)
             elif event.key == pygame.K_4:
                 rend.setShaders(vertex_shader, siren_shader)
+            elif event.key == pygame.K_5:
+                rend.setShaders(gomu_gomu_shader, fragment_shader)
 
     if keys[K_q]:
         if rend.camDistance > 2:
