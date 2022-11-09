@@ -65,13 +65,11 @@ void main()
   rawX=pos;
   modelN=normals;  
   UVs = texcoords;
-  
-  // Comment these lines out to stop twisting
-  //modelX.xz = Rotate2D(modelX.xz,sin(time)); // Try commenting out *just* this line :)
+
   modelX.x = modelX.x + sin(modelX.y + time*3)/2;
-  //modelN.xz = Rotate2D(modelN.xz,sin(time)); // This is simple as that only since the transform is rotation
+  modelX.z = modelX.z + cos(modelX.y + time*3)/2;
   norms = normals;
-  //fNormal = normalize((modelMatrix * vec4(norms, 0)).xyz);
+
   vec4 pos = viewMatrix * vec4(modelX, 1.0);
   fPosition = pos.xyz;
   gl_Position = projectionMatrix * pos;
