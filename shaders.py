@@ -1,5 +1,5 @@
 vertex_shader ='''
-#version 450 core
+#version 460 core
 
 layout (location = 0) in vec3 position;
 layout (location = 1) in vec2 texcoords;
@@ -27,7 +27,7 @@ void main()
 '''
 
 gomu_gomu_shader ='''
-#version 450 core
+#version 456 core
 
 layout (location = 0) in vec3 position;
 layout (location = 1) in vec2 texcoords;
