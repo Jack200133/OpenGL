@@ -24,6 +24,8 @@ rend.setShaders(vertex_shader, fragment_shader)
 
 rend.target.z = -5
 
+ambientsound = pygame.mixer.Sound("music/space.mp3")
+song = pygame.mixer.Sound("music/star.mp3")
 face = Model("nave/model.obj", "nave/texture.bmp")
 ufos = Model("ufo/model.obj", "ufo/texture.bmp")
 raven = Model("raven/model.obj", "raven/texture.bmp")
@@ -55,7 +57,8 @@ imperial.scale.z = 0.005
 
 rend.scene.append( face )
 
-
+pygame.mixer.music.load("music/space.mp3")
+pygame.mixer.music.play(-1)
 isRunning = True
 
 while isRunning:
@@ -82,22 +85,35 @@ while isRunning:
             
 
         elif event.type == pygame.KEYDOWN:
+            
             if event.key == pygame.K_ESCAPE:
                 isRunning = False
 
             elif event.key == pygame.K_z:
+
                 rend.filledMode()
             elif event.key == pygame.K_x:
                 rend.wireframeMode()
             elif event.key == pygame.K_1:
+                pygame.mixer.Sound.stop(song)
+                pygame.mixer.music.unpause()    
                 rend.setShaders(vertex_shader, fragment_shader)
             elif event.key == pygame.K_2:
+                pygame.mixer.Sound.stop(song)
+                pygame.mixer.music.unpause()  
                 rend.setShaders(vertex_shader, toon_shader)
             elif event.key == pygame.K_3:
+                pygame.mixer.Sound.play(song)
+                pygame.mixer.music.pause()
+
                 rend.setShaders(vertex_shader, rainbow_shader)
             elif event.key == pygame.K_4:
+                pygame.mixer.Sound.stop(song)
+                pygame.mixer.music.unpause()  
                 rend.setShaders(vertex_shader, siren_shader)
             elif event.key == pygame.K_5:
+                pygame.mixer.Sound.stop(song)
+                pygame.mixer.music.unpause()  
                 rend.setShaders(gomu_gomu_shader, fragment_shader)
             elif event.key == pygame.K_6:
                 rend.scene.clear()
