@@ -28,6 +28,7 @@ face = Model("nave/model.obj", "nave/texture.bmp")
 ufos = Model("ufo/model.obj", "ufo/texture.bmp")
 raven = Model("raven/model.obj", "raven/texture.bmp")
 ship = Model("ship/model.obj", "ship/texture.png")
+imperial = Model("imperial/model.obj", "imperial/texture.jpeg")
 
 face.position.z -= 5
 face.scale.x = 0.01
@@ -46,6 +47,12 @@ ship.scale.x = 0.5
 ship.scale.y = 0.5
 ship.scale.z = 0.5
 
+imperial.position.z -= 5
+imperial.scale.x = 0.005
+imperial.scale.y = 0.005
+imperial.scale.z = 0.005
+
+
 rend.scene.append( face )
 
 
@@ -59,6 +66,20 @@ while isRunning:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             isRunning = False
+
+        elif event.type == pygame.MOUSEMOTION:
+            position = pygame.mouse.get_pos()
+            rend.angle = (position[0] - width/2) 
+            rend.camPosition.y = (position[1] - height/2)/100
+
+        elif event.type == pygame.MOUSEWHEEL:
+            if event.y  > 0:
+                if rend.camDistance > 2:
+                    rend.camDistance -= event.y
+            else:
+                if rend.camDistance <10:
+                    rend.camDistance -= event.y
+            
 
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
@@ -90,6 +111,9 @@ while isRunning:
             elif event.key == pygame.K_9:
                 rend.scene.clear()
                 rend.scene.append( ship )
+            elif event.key == pygame.K_0:
+                rend.scene.clear()
+                rend.scene.append( imperial )
 
 
     if keys[K_q]:
@@ -108,14 +132,14 @@ while isRunning:
 
 
     if keys[K_w]:
-        if rend.camPosition.y < 2:
-            rend.camPosition.y += 5 * deltaTime
+        #if rend.camPosition.y < 2:
+        rend.camPosition.y += 5 * deltaTime
     elif keys[K_s]:
-        if rend.camPosition.y > -2:
-            rend.camPosition.y -= 5 * deltaTime
+        #if rend.camPosition.y > -2:
+        rend.camPosition.y -= 5 * deltaTime
 
 
-    rend.target.y = rend.camPosition.y
+    #rend.target.y = rend.camPosition.y
 
     rend.camPosition.x = rend.target.x + sin(radians(rend.angle)) * rend.camDistance
     rend.camPosition.z = rend.target.z + cos(radians(rend.angle)) * rend.camDistance

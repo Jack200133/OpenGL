@@ -1,5 +1,5 @@
 vertex_shader ='''
-#version 460 core
+#version 450 core
 
 layout (location = 0) in vec3 position;
 layout (location = 1) in vec2 texcoords;
@@ -27,7 +27,7 @@ void main()
 '''
 
 gomu_gomu_shader ='''
-#version 456 core
+#version 450 core
 
 layout (location = 0) in vec3 position;
 layout (location = 1) in vec2 texcoords;
@@ -43,12 +43,12 @@ out vec2 UVs;
 out vec3 norms;
 out vec3 pos;
 
-varying vec3 fNormal;
-varying vec3 fPosition;
+out vec3 fNormal;
+out vec3 fPosition;
 const float pi=3.14159;
-varying vec3 modelX;
-varying vec3 modelN;
-varying vec3 rawX;
+out vec3 modelX;
+out vec3 modelN;
+out vec3 rawX;
 
 vec2 Rotate2D(vec2 vec_in, float angle)
 {
